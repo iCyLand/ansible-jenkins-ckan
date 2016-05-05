@@ -4,7 +4,7 @@ Prepare environment by Ansible Deploy CKAN application by Jenkins
 ### Prerequisite
 OS : Ubuntu 14.04 LTS minimal installation with only OpenSSH server
 
-### Pakage requitement instruction
+### Initialize command
 ```
 sudo apt-get install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible
