@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
-  sudo: True
-  sudo_user: root
+  become_method: sudo
+  become: True
+  become_user: root
   roles:
     - common

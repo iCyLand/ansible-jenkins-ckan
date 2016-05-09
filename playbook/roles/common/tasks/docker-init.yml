@@ -23,11 +23,65 @@
   tags: [package, docker]
 
 - name: Install docker engine
-  apt: name=docker-engine state=latest
+  apt: name={{item}} state=latest
+  with_items:
+    - docker-engine
   tags: [package, docker]
 
 - name: Set docker daemon options
-  copy: content="DOCKER_OPTS=\"{{ docker_opts.rstrip('\n') }}\"" dest=/etc/default/docker owner=root group=root mode=0644
+  lineinfile: dest="/etc/default/docker" line="DOCKER_OPTS=\"{{ docker_opts }}\"" regexp="^.?DOCKER_OPTS=" insertafter="Use DOCKER_OPTS"
   notify:
     - Restart docker
+  tags: [config, docker]
+
+- name: Install python util
+  apt: name={{item}} state=latest
+  with_items:
+    - python-dev
+    - python-pip
+  tags: [package, docker]
+
+- name: Install pip package
+  pip: name={{item}} state=latest
+  with_items:
+    - pip
+    - setuptools
+    - docker-py
+    - docker-compose
+  tags: [pip, docker]
+
+- name: Check updatedb.conf state
+  stat: path="/etc/updatedb.conf"
+  register: updatedb_conf_exists
+  tags: [config, docker]
+
+- name: Exclude /var/lib/docker from updatedb
+  lineinfile: dest="/etc/updatedb.conf" state=present backrefs=yes regexp='^PRUNEPATHS="(/var/lib/docker )?(.*)"$' line='PRUNEPATHS="/var/lib/docker \2"'
+  when: updatedb_conf_exists.stat.exists
+  tags: [config, docker]
+
+- name: Check ufw state
+  stat: path="/etc/default/ufw"
+  register: ufw_default_exists
+  tags: [config, docker]
+
+- name: Change ufw policy
+  lineinfile: dest="/etc/default/ufw" regexp="^DEFAULT_FORWARD_POLICY=" line="DEFAULT_FORWARD_POLICY=\"ACCEPT\""
+  when: ufw_default_exists.stat.exists
+  tags: [config, docker]
+
+- name: Allow ufw tcp/2375
+  ufw: rule=allow port=2375 proto=tcp
+  tags: [config, docker]
+
+- name: Add running user to docker group
+  user: name={{ ansible_user_id }} groups=docker append=yes
+  tags: [config, docker]
+
+- name: Start Docker
+  service: name=docker state=started
+  tags: [config, docker]
+
+- name: Enable docker start at boot
+  service: name=docker enabled=yes
   tags: [config, docker]
