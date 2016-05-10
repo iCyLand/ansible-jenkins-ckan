@@ -2,3 +2,5 @@
 #- include: apparmor.yml
 #- include: upgrade-pkg.yml
 - include: docker-init.yml
+- include: ckan-init.yml
+- include: jenkins.yml

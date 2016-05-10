@@ -2,3 +2,7 @@
 - name: Upgrade packages to latest version
   apt: upgrade=full update_cache=yes
   tags: [config, package]
+
+- name: Install JDK7
+  apt: name=openjdk-7-jdk state=latest
+  tags: [config, package]

@@ -1,0 +1,8 @@
+---
+- name: Docker pull Jenkins
+  docker:
+    name: project-jenkins
+    image: jenkins
+    state: started
+    ports:
+      - "8080:8080"
