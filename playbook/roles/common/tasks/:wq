@@ -1,0 +1,27 @@
+---
+
+- name: Prepare jenkins directory
+  file:
+    path="{{item}}"
+    state=directory
+    mode=0777
+  with_items: jenkins_dir
+
+- name: Plugins installation
+  copy:
+    src="{{item}}"
+    dest="{{ jenkins_root }}/plugins/{{item}}"
+    mode=0777
+  with_items: jenkins_plugins
+
+
+- name: Docker pull Jenkins
+  docker:
+    name: project-jenkins
+    image: jenkins
+    state: started
+    ports:
+      - "8080:8080"
+      - "50000:5000"
+    tty: true
+    volumes: /data/jenkins:/var/jenkins_home

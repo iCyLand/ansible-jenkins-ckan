@@ -1,0 +1,42 @@
+---
+
+docker_opts: '-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --dns {{ ansible_docker0.ipv4.address }}'
+
+docker_user_members:
+  - sysadmin
+
+jenkins_root: /data/jenkins
+
+jenkins_dir:
+  - '{{ jenkins_root }}/plugins'
+
+jenkins_plugins:
+  - ansible.hpi
+  - ant.hpi
+  - antisamy-markup-formatter.hpi
+  - build-pipeline-plugin.hpi
+  - credentials-binding.hpi
+  - credentials.hpi
+  - cvs.hpi
+  - docker-commons.hpi
+  - docker-plugin.hpi
+  - external-monitor-job.hpi
+  - git-client.hpi
+  - git.hpi
+  - github.hpi
+  - git-parameter.hpi
+  - javadoc.hpi
+  - junit.hpi
+  - ldap.hpi
+  - mailer.hpi
+  - matrix-auth.hpi
+  - matrix-project.hpi
+  - maven-plugin.hpi
+  - pam-auth.hpi
+  - publish-over-ssh.hpi
+  - script-security.hpi
+  - ssh-credentials.hpi
+  - ssh-slaves.hpi
+  - subversion.hpi
+  - translation.hpi
+  - windows-slaves.hpi
