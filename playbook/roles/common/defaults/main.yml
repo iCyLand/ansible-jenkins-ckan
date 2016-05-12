@@ -1,6 +1,6 @@
 ---
 
-docker_opts: '-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --dns {{ ansible_docker0.ipv4.address }}'
+docker_opts: '-H tcp://127.0.0.1:4243 -H tcp://{{ ansible_docker0.ipv4.address }}:4243 -H unix:///var/run/docker.sock --dns 8.8.8.8 --dns 8.8.4.4 --dns {{ ansible_docker0.ipv4.address }}'
 
 docker_user_members:
   - sysadmin
@@ -14,12 +14,15 @@ jenkins_plugins:
   - ansible.hpi
   - ant.hpi
   - antisamy-markup-formatter.hpi
+  - authentication-tokens.hpi
   - build-pipeline-plugin.hpi
   - credentials-binding.hpi
   - credentials.hpi
   - cvs.hpi
   - docker-commons.hpi
   - docker-plugin.hpi
+  - docker-slaves.hpi
+  - durable-task.hpi
   - external-monitor-job.hpi
   - git-client.hpi
   - git.hpi
